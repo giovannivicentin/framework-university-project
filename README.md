@@ -24,6 +24,9 @@ framework-university-project/
 │   │   ├── projectRepository.js
 │   │   └── taskRepository.js
 │   │
+│   ├── requests
+│   │   └── requests.rest
+│   │
 │   ├── services
 │   │   ├── authService.js
 │   │   ├── projectService.js
