@@ -1,7 +1,11 @@
-export const createProject = async (name) => {
+import Project from "../models/Project.js";
+
+const createProject = async (name) => {
   return await Project.create({ name });
 };
 
-export const getAllProjects = async () => {
+const getAllProjects = async () => {
   return await Project.findAll();
 };
+
+export default { createProject, getAllProjects };
