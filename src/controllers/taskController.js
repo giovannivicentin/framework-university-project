@@ -1,4 +1,4 @@
-import taskService from '../services/taskService.js';
+import taskService from "../services/taskService.js";
 
 export const addTask = async (req, res) => {
   const { name } = req.body;
@@ -10,7 +10,11 @@ export const addTask = async (req, res) => {
 export const updateTask = async (req, res) => {
   const { projectId, taskId } = req.params;
   const updatedData = req.body;
-  const updatedTask = await taskService.updateTask(projectId, taskId, updatedData);
+  const updatedTask = await taskService.updateTask(
+    projectId,
+    taskId,
+    updatedData
+  );
   res.status(200).json(updatedTask);
 };
 

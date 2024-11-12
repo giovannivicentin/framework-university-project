@@ -1,5 +1,3 @@
-
-
 export const createProject = async (name) => {
   return await Project.create({ name });
 };

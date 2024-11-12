@@ -1,4 +1,4 @@
-import projectService from '../services/projectService.js';
+import projectService from "../services/projectService.js";
 
 export const createProject = async (req, res) => {
   const { name } = req.body;
