@@ -11,4 +11,4 @@ const Task = sequelize.define("Task", {
   status: { type: DataTypes.STRING, allowNull: false, defaultValue: "pending" },
 });
 
-export default Task;
+export default { Task };
