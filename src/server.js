@@ -1,31 +1,39 @@
 import express from "express";
-import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import dotenv from "dotenv";
 import sequelize from "./config/database.js";
 import * as projectController from "./controllers/projectController.js";
 import * as taskController from "./controllers/taskController.js";
 import authMiddleware from "./middleware/authMiddleware.js";
+import { authenticateUser } from "./services/authService.js";
+import fs from "fs";
+import path from "path";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Trello-inspired Task Management API",
-      version: "1.0.0",
-      description: "API documentation for Task Management project",
-    },
-  },
-  apis: ["./src/server.js"],
-};
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// Load the swagger.json file
+const swaggerDocument = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), "src/swagger.json"), "utf8")
+);
 
+// Serve Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Implement the /login route
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const token = await authenticateUser(username, password);
+    res.json({ token });
+  } catch (error) {
+    res.status(401).json({ message: "Authentication failed" });
+  }
+});
+
+// Existing routes
 app.post("/projects", authMiddleware, projectController.createProject);
 app.get("/projects", authMiddleware, projectController.getAllProjects);
 app.post("/projects/:id/tasks", authMiddleware, taskController.addTask);
