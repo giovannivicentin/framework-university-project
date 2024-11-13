@@ -6,6 +6,7 @@ import * as projectController from "./controllers/projectController.js";
 import * as taskController from "./controllers/taskController.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 import { authenticateUser } from "./services/authService.js";
+import * as userController from "./controllers/userController.js";
 import fs from "fs";
 import path from "path";
 
@@ -18,6 +19,9 @@ app.use(express.json());
 const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), "src/swagger.json"), "utf8")
 );
+
+// Implement the /register route
+app.post("/register", userController.registerUser);
 
 // Serve Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
