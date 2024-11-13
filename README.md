@@ -1,10 +1,14 @@
-# API de Controle de Projetos e Tarefas
+# Kanban (To-Do List/Trello)
 
 ## Descrição:
 
-Inspirada no Trello, esta API gerencia projetos e as tarefas relacionadas. Cada projeto pode ter várias tarefas associadas a ele, e os usuários podem organizá-las de acordo com o status.
+Inspirada no Trello, este projeto gerencia projetos e as tarefas relacionadas. Cada projeto pode ter várias tarefas associadas a ele, e os usuários podem organizá-las de acordo com o status.
 
 ## Endpoints:
+
+• POST /register - Cria um novo usuário.
+
+• POST /login - Autentica o usuário e retorna um JWT, que deve ser usado em todas as requisições futuras.
 
 • POST /projects - Cria um novo projeto.
 
@@ -23,12 +27,12 @@ framework-university-project/
 ├── src
 │   │
 │   ├── config
-│   │   │
 │   │   └── database.js
 │   │
 │   ├── controllers
 │   │   ├── projectController.js
-│   │   └── taskController.js
+│   │   ├── taskController.js
+│   │   └── userController.js
 │   │
 │   ├── middleware
 │   │   └── authMiddleware.js
@@ -38,10 +42,6 @@ framework-university-project/
 │   │   ├── Task.js
 │   │   └── User.js
 │   │
-│   ├── repositories
-│   │   ├── projectRepository.js
-│   │   └── taskRepository.js
-│   │
 │   ├── requests
 │   │   └── requests.rest
 │   │
@@ -49,13 +49,10 @@ framework-university-project/
 │   │   ├── authService.js
 │   │   ├── projectService.js
 │   │   └── taskService.js
-│   │   │
-│   ├── utils
-│   │   └── errorHandler.js
 │   │
 │   └── server.js
 │
-├── .env
+├── .env // precisa criar o seu (se inspire no .env.example)
 ├── .env.example
 ├── Dockerfile
 ├── docker-compose.yml
