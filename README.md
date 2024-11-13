@@ -2,7 +2,7 @@
 
 ## Descrição:
 
-Inspirada no Trello, este projeto gerencia projetos e as tarefas relacionadas. Cada projeto pode ter várias tarefas associadas a ele, e os usuários podem organizá-las de acordo com o status.
+Inspirado no modelo kanban, este projeto organiza projetos e suas tarefas associadas. Cada projeto permite o gerenciamento de múltiplas tarefas, organizadas por status. Inclui um sistema de autenticação para criação de conta, login e acesso restrito a usuários autenticados.
 
 ## Endpoints:
 
