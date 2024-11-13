@@ -39,3 +39,17 @@ export const deleteTask = async (req, res) => {
     }
   }
 };
+
+export const getTasks = async (req, res) => {
+  const projectId = req.params.id;
+  try {
+    const project = await Project.findByPk(projectId);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+    const tasks = await taskService.getTasksByProject(projectId);
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
