@@ -31,11 +31,17 @@
           "name": {
             "type": "string",
             "description": "Name of the project"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the user who owns the project"
           }
         },
         "example": {
           "id": 1,
-          "name": "Project Alpha"
+          "name": "Project Alpha",
+          "userId": "550e8400-e29b-41d4-a716-446655440000"
         }
       },
       "Task": {
@@ -103,6 +109,18 @@
           "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         }
       },
+      "SuccessMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message"
+          }
+        },
+        "example": {
+          "message": "User registered successfully"
+        }
+      },
       "Error": {
         "type": "object",
         "properties": {
@@ -112,7 +130,7 @@
           }
         },
         "example": {
-          "message": "Authentication failed"
+          "message": "An error occurred"
         }
       }
     }
@@ -123,6 +141,56 @@
     }
   ],
   "paths": {
+    "/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Authentication"],
+        "security": [],
+        "requestBody": {
+          "description": "User registration data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCredentials"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Username already taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "summary": "Authenticate a user and obtain a JWT token",
@@ -167,6 +235,11 @@
       "post": {
         "summary": "Create a new project",
         "tags": ["Projects"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "description": "Project object to be created",
           "required": true,
@@ -214,6 +287,11 @@
       "get": {
         "summary": "Retrieve all projects",
         "tags": ["Projects"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of projects retrieved successfully",
@@ -245,6 +323,11 @@
       "post": {
         "summary": "Add a new task to a project",
         "tags": ["Tasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -316,6 +399,11 @@
       "put": {
         "summary": "Update a task within a project",
         "tags": ["Tasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "projectId",
@@ -395,6 +483,11 @@
       "delete": {
         "summary": "Delete a task from a project",
         "tags": ["Tasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "projectId",
