@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Trello-inspired Task Management API",
+    "title": "Kanban (To-Do List/Trello)",
     "version": "1.0.0",
-    "description": "API documentation for the Task Management project"
+    "description": "API documentation for the Kanban API, a Framework University project"
   },
   "servers": [
     {
