@@ -41,6 +41,7 @@ app.post("/login", async (req, res) => {
 app.post("/projects", authMiddleware, projectController.createProject);
 app.get("/projects", authMiddleware, projectController.getAllProjects);
 app.post("/projects/:id/tasks", authMiddleware, taskController.addTask);
+app.get("/projects/:id/tasks", authMiddleware, taskController.getTasks);
 app.put(
   "/projects/:projectId/tasks/:taskId",
   authMiddleware,

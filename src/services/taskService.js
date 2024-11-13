@@ -15,3 +15,7 @@ export const deleteTask = async (projectId, taskId) => {
   if (!task) throw new Error("Task not found");
   await task.destroy();
 };
+
+export const getTasksByProject = async (projectId) => {
+  return await Task.findAll({ where: { projectId } });
+};
