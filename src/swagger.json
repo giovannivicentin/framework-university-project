@@ -25,8 +25,9 @@
         "required": ["name"],
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "Auto-generated ID of the project"
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the project"
           },
           "name": {
             "type": "string",
@@ -34,42 +35,40 @@
           }
         },
         "example": {
-          "id": 1,
+          "id": "123e4567-e89b-12d3-a456-426614174000",
           "name": "Project Alpha"
         }
       },
       "Task": {
         "type": "object",
-        "required": ["title"],
+        "required": ["name"],
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "Auto-generated ID of the task"
-          },
-          "title": {
             "type": "string",
-            "description": "Title of the task"
+            "format": "uuid",
+            "description": "UUID of the task"
           },
-          "description": {
+          "name": {
             "type": "string",
-            "description": "Description of the task"
+            "description": "Name of the task"
           },
           "status": {
             "type": "string",
             "description": "Status of the task",
-            "enum": ["todo", "in_progress", "done"]
+            "enum": ["pending", "in_progress", "done"],
+            "default": "pending"
           },
           "projectId": {
-            "type": "integer",
-            "description": "ID of the project the task belongs to"
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the project the task belongs to"
           }
         },
         "example": {
-          "id": 1,
-          "title": "Design the homepage",
-          "description": "Create the initial design for the homepage",
-          "status": "todo",
-          "projectId": 1
+          "id": "123e4567-e89b-12d3-a456-426614174001",
+          "name": "Design the homepage",
+          "status": "pending",
+          "projectId": "123e4567-e89b-12d3-a456-426614174000"
         }
       },
       "UserCredentials": {
@@ -118,13 +117,13 @@
       "Error": {
         "type": "object",
         "properties": {
-          "message": {
+          "error": {
             "type": "string",
             "description": "Error message"
           }
         },
         "example": {
-          "message": "An error occurred"
+          "error": "An error occurred"
         }
       }
     }
@@ -326,12 +325,13 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the project",
+            "description": "UUID of the project",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             },
-            "example": 1
+            "example": "123e4567-e89b-12d3-a456-426614174000"
           }
         ],
         "requestBody": {
@@ -340,7 +340,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Task"
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the task"
+                  }
+                },
+                "example": {
+                  "name": "Design the homepage"
+                }
               }
             }
           }
@@ -387,6 +397,73 @@
             }
           }
         }
+      },
+      "get": {
+        "summary": "Retrieve all tasks of a project",
+        "tags": ["Tasks"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID of the project",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of tasks retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/projects/{projectId}/tasks/{taskId}": {
@@ -402,31 +479,48 @@
           {
             "name": "projectId",
             "in": "path",
-            "description": "ID of the project",
+            "description": "UUID of the project",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             },
-            "example": 1
+            "example": "123e4567-e89b-12d3-a456-426614174000"
           },
           {
             "name": "taskId",
             "in": "path",
-            "description": "ID of the task",
+            "description": "UUID of the task",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             },
-            "example": 1
+            "example": "123e4567-e89b-12d3-a456-426614174001"
           }
         ],
         "requestBody": {
-          "description": "Updated task object",
+          "description": "Updated task data",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Task"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Updated name of the task"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Updated status of the task",
+                    "enum": ["pending", "in_progress", "done"]
+                  }
+                },
+                "example": {
+                  "name": "Update the homepage design",
+                  "status": "in_progress"
+                }
               }
             }
           }
@@ -486,22 +580,24 @@
           {
             "name": "projectId",
             "in": "path",
-            "description": "ID of the project",
+            "description": "UUID of the project",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             },
-            "example": 1
+            "example": "123e4567-e89b-12d3-a456-426614174000"
           },
           {
             "name": "taskId",
             "in": "path",
-            "description": "ID of the task",
+            "description": "UUID of the task",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             },
-            "example": 1
+            "example": "123e4567-e89b-12d3-a456-426614174001"
           }
         ],
         "responses": {
