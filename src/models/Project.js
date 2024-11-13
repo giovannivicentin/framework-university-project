@@ -10,4 +10,4 @@ const Project = sequelize.define("Project", {
   name: { type: DataTypes.STRING, allowNull: false },
 });
 
-export default { Project };
+export default Project;
