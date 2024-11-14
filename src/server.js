@@ -15,18 +15,17 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Load the swagger.json file
 const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), "src/swagger.json"), "utf8")
 );
 
-// Implement the /register route
+// register route
 app.post("/register", userController.registerUser);
 
-// Serve Swagger UI
+// swagger route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Implement the /login route
+// login route
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -37,7 +36,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Existing routes
+// endpoints of application
 app.post("/projects", authMiddleware, projectController.createProject);
 app.get("/projects", authMiddleware, projectController.getAllProjects);
 app.post("/projects/:id/tasks", authMiddleware, taskController.addTask);
