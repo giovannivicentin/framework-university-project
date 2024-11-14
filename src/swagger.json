@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Kanban (To-Do List/Trello)",
+    "title": "Kanban API",
     "version": "1.0.0",
-    "description": "API documentation for the Kanban API, a Framework University project"
+    "description": "API documentation for the Kanban application."
   },
   "servers": [
     {
@@ -25,18 +25,15 @@
         "required": ["name"],
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "UUID of the project"
+            "type": "integer",
+            "description": "Auto-incrementing ID of the project",
+            "example": 1
           },
           "name": {
             "type": "string",
-            "description": "Name of the project"
+            "description": "Name of the project",
+            "example": "Project of UniAnchieta"
           }
-        },
-        "example": {
-          "id": "123e4567-e89b-12d3-a456-426614174000",
-          "name": "Project Alpha"
         }
       },
       "Task": {
@@ -44,31 +41,27 @@
         "required": ["name"],
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "UUID of the task"
+            "type": "integer",
+            "description": "Auto-incrementing ID of the task",
+            "example": 1
           },
           "name": {
             "type": "string",
-            "description": "Name of the task"
+            "description": "Name of the task",
+            "example": "Design the homepage"
           },
           "status": {
             "type": "string",
             "description": "Status of the task",
             "enum": ["pending", "in_progress", "done"],
-            "default": "pending"
+            "default": "pending",
+            "example": "pending"
           },
           "projectId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "UUID of the project the task belongs to"
+            "type": "integer",
+            "description": "ID of the project the task belongs to",
+            "example": 1
           }
-        },
-        "example": {
-          "id": "123e4567-e89b-12d3-a456-426614174001",
-          "name": "Design the homepage",
-          "status": "pending",
-          "projectId": "123e4567-e89b-12d3-a456-426614174000"
         }
       },
       "UserCredentials": {
@@ -77,17 +70,15 @@
         "properties": {
           "username": {
             "type": "string",
-            "description": "Username of the user"
+            "description": "Username of the user",
+            "example": "your_username"
           },
           "password": {
             "type": "string",
             "format": "password",
-            "description": "Password of the user"
+            "description": "Password of the user",
+            "example": "your_password"
           }
-        },
-        "example": {
-          "username": "john_doe",
-          "password": "your_password"
         }
       },
       "AuthToken": {
@@ -95,35 +86,9 @@
         "properties": {
           "token": {
             "type": "string",
-            "description": "JWT authentication token"
+            "description": "JWT authentication token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           }
-        },
-        "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        }
-      },
-      "SuccessMessage": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "Success message"
-          }
-        },
-        "example": {
-          "message": "User registered successfully"
-        }
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "description": "Error message"
-          }
-        },
-        "example": {
-          "error": "An error occurred"
         }
       }
     }
@@ -138,15 +103,12 @@
       "post": {
         "summary": "Register a new user",
         "tags": ["Authentication"],
-        "security": [],
         "requestBody": {
           "description": "User registration data",
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCredentials"
-              }
+              "schema": { "$ref": "#/components/schemas/UserCredentials" }
             }
           }
         },
@@ -155,31 +117,12 @@
             "description": "User registered successfully",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessMessage"
-                }
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
               }
             }
           },
           "409": {
-            "description": "Username already taken",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Username already taken"
           }
         }
       }
@@ -188,15 +131,12 @@
       "post": {
         "summary": "Authenticate a user and obtain a JWT token",
         "tags": ["Authentication"],
-        "security": [],
         "requestBody": {
           "description": "User credentials for authentication",
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCredentials"
-              }
+              "schema": { "$ref": "#/components/schemas/UserCredentials" }
             }
           }
         },
@@ -205,21 +145,12 @@
             "description": "Successful authentication",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthToken"
-                }
+                "schema": { "$ref": "#/components/schemas/AuthToken" }
               }
             }
           },
           "401": {
-            "description": "Authentication failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Authentication failed"
           }
         }
       }
@@ -228,19 +159,13 @@
       "post": {
         "summary": "Create a new project",
         "tags": ["Projects"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "description": "Project object to be created",
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Project"
-              }
+              "schema": { "$ref": "#/components/schemas/Project" }
             }
           }
         },
@@ -249,42 +174,19 @@
             "description": "Project created successfully",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Project"
-                }
+                "schema": { "$ref": "#/components/schemas/Project" }
               }
             }
           },
           "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid input"
           }
         }
       },
       "get": {
         "summary": "Retrieve all projects",
         "tags": ["Projects"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "List of projects retrieved successfully",
@@ -292,19 +194,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Project"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "items": { "$ref": "#/components/schemas/Project" }
                 }
               }
             }
@@ -316,22 +206,15 @@
       "post": {
         "summary": "Add a new task to a project",
         "tags": ["Tasks"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "UUID of the project",
+            "description": "ID of the project",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "example": "123e4567-e89b-12d3-a456-426614174000"
+            "schema": { "type": "integer" },
+            "example": 1
           }
         ],
         "requestBody": {
@@ -345,11 +228,9 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Name of the task"
+                    "description": "Name of the task",
+                    "example": "Design the homepage"
                   }
-                },
-                "example": {
-                  "name": "Design the homepage"
                 }
               }
             }
@@ -360,63 +241,27 @@
             "description": "Task added successfully",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
+                "schema": { "$ref": "#/components/schemas/Task" }
               }
             }
           },
           "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Project not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid input"
           }
         }
       },
       "get": {
         "summary": "Retrieve all tasks of a project",
         "tags": ["Tasks"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "UUID of the project",
+            "description": "ID of the project",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "example": "123e4567-e89b-12d3-a456-426614174000"
+            "schema": { "type": "integer" },
+            "example": 1
           }
         ],
         "responses": {
@@ -426,42 +271,13 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Task"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "items": { "$ref": "#/components/schemas/Task" }
                 }
               }
             }
           },
           "404": {
-            "description": "Project not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Project not found"
           }
         }
       }
@@ -470,33 +286,23 @@
       "put": {
         "summary": "Update a task within a project",
         "tags": ["Tasks"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "projectId",
             "in": "path",
-            "description": "UUID of the project",
+            "description": "ID of the project",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "example": "123e4567-e89b-12d3-a456-426614174000"
+            "schema": { "type": "integer" },
+            "example": 1
           },
           {
             "name": "taskId",
             "in": "path",
-            "description": "UUID of the task",
+            "description": "ID of the task",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "example": "123e4567-e89b-12d3-a456-426614174001"
+            "schema": { "type": "integer" },
+            "example": 1
           }
         ],
         "requestBody": {
@@ -509,17 +315,15 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "description": "Updated name of the task"
+                    "description": "Updated name of the task",
+                    "example": "Update the homepage design"
                   },
                   "status": {
                     "type": "string",
                     "description": "Updated status of the task",
-                    "enum": ["pending", "in_progress", "done"]
+                    "enum": ["pending", "in_progress", "done"],
+                    "example": "in_progress"
                   }
-                },
-                "example": {
-                  "name": "Update the homepage design",
-                  "status": "in_progress"
                 }
               }
             }
@@ -530,99 +334,43 @@
             "description": "Task updated successfully",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
+                "schema": { "$ref": "#/components/schemas/Task" }
               }
             }
           },
           "404": {
-            "description": "Task or project not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Task or project not found"
           }
         }
       },
       "delete": {
         "summary": "Delete a task from a project",
         "tags": ["Tasks"],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "projectId",
             "in": "path",
-            "description": "UUID of the project",
+            "description": "ID of the project",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "example": "123e4567-e89b-12d3-a456-426614174000"
+            "schema": { "type": "integer" },
+            "example": 1
           },
           {
             "name": "taskId",
             "in": "path",
-            "description": "UUID of the task",
+            "description": "ID of the task",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "example": "123e4567-e89b-12d3-a456-426614174001"
+            "schema": { "type": "integer" },
+            "example": 1
           }
         ],
         "responses": {
           "204": {
             "description": "Task deleted successfully"
           },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
           "404": {
-            "description": "Task or project not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Task or project not found"
           }
         }
       }
