@@ -1,0 +1,81 @@
+### Register a new user
+
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "username": "your_username",
+  "password": "your_password"
+}
+
+###
+
+### Login to obtain a JWT token
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "username": "your_username",
+  "password": "your_password"
+}
+
+###
+
+### Create a new project
+
+POST http://localhost:3000/projects
+Content-Type: application/json
+Authorization: Bearer your_actual_jwt_token
+
+{
+  "name": "Project of UniAnchieta"
+}
+
+###
+
+### Retrieve all projects
+
+GET http://localhost:3000/projects
+Authorization: Bearer your_actual_jwt_token
+
+###
+
+### Add a new task to a project
+
+POST http://localhost:3000/projects/1/tasks
+Content-Type: application/json
+Authorization: Bearer your_actual_jwt_token
+
+{
+  "name": "Design the homepage"
+}
+
+###
+
+### Retrieve all tasks of a project
+
+GET http://localhost:3000/projects/1/tasks
+Authorization: Bearer your_actual_jwt_token
+
+###
+
+### Update a task within a project
+
+PUT http://localhost:3000/projects/1/tasks/1
+Content-Type: application/json
+Authorization: Bearer your_actual_jwt_token
+
+{
+  "name": "Update the homepage design",
+  "status": "in_progress"
+}
+
+###
+
+### Delete a task from a project
+
+DELETE http://localhost:3000/projects/1/tasks/1
+Authorization: Bearer your_actual_jwt_token
+
+###
