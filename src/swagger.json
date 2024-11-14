@@ -366,11 +366,27 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Task deleted successfully"
+          "200": {
+            "description": "Task deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                },
+                "example": {
+                  "message": "Task deleted successfully"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Task or project not found"
+            "description": "Task or project not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" },
+                "example": { "error": "Task not found" }
+              }
+            }
           }
         }
       }
