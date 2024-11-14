@@ -21,30 +21,31 @@ Inspirado no modelo kanban, este projeto organiza projetos e suas tarefas associ
 ## Estrutura do Projeto
 
 ```bash
-framework-university-project/
-├── src
+/framework-university-project
+│
+├── /src
 │   │
-│   ├── config
+│   ├── /config
 │   │   └── database.js
 │   │
-│   ├── controllers
+│   ├── /controllers
 │   │   ├── projectController.js
 │   │   ├── taskController.js
 │   │   └── userController.js
 │   │
-│   ├── middleware
+│   ├── /middleware
 │   │   └── authMiddleware.js
 │   │
-│   ├── models
+│   ├── /models
 │   │   ├── index.js
 │   │   ├── Project.js
 │   │   ├── Task.js
 │   │   └── User.js
 │   │
-│   ├── requests
+│   ├── /requests
 │   │   └── requests.rest
 │   │
-│   ├── services
+│   ├── /services
 │   │   ├── authService.js
 │   │   ├── projectService.js
 │   │   └── taskService.js
@@ -73,7 +74,7 @@ framework-university-project/
 
 • GET /projects - Lista todos os projetos.
 
-## Gerenciamento de Tarefas
+### Gerenciamento de Tarefas
 
 • POST /projects/{id}/tasks - Adiciona uma tarefa a um projeto específico
 
@@ -87,36 +88,36 @@ framework-university-project/
 
 1. Clonar o repositório:
 
-   ```bash
-   git clone <repository-url>
-   cd framework-university-project
-   ```
+```bash
+git clone <repository-url>
+cd framework-university-project
+```
 
 2. Configurar variáveis de ambiente:
 
    • Crie um arquivo .env com base no .env.example.
-
+   
    • Defina DATABASE_URL e SECRET_KEY.
 
 3. Instalar as dependências:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 4. Executando a aplicação localmente:
 
 - Com Docker:
 
-  ```bash
-  docker-compose up --build
-  ```
+```bash
+docker-compose up --build
+```
 
 - Sem Docker:
 
-  ```bash
-  npm start
-  ```
+```bash
+npm start
+```
 
 5. Testes:
 
