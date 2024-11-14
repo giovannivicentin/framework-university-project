@@ -116,9 +116,7 @@
           "201": {
             "description": "Usuário registrado com sucesso",
             "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
-              }
+              "application/json": {}
             }
           },
           "409": {
@@ -370,9 +368,7 @@
             "description": "Tarefa excluída com sucesso",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessMessage"
-                },
+                "schema": {},
                 "example": {
                   "message": "Tarefa excluída com sucesso"
                 }
