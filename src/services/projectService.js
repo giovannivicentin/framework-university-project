@@ -8,4 +8,8 @@ const getAllProjects = async () => {
   return await Project.findAll();
 };
 
-export default { createProject, getAllProjects };
+const getProjectById = async (id) => {
+  return await Project.findByPk(id);
+};
+
+export default { createProject, getAllProjects, getProjectById };
