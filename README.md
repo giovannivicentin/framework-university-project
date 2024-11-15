@@ -89,7 +89,7 @@ Inspirado no modelo kanban, este projeto organiza projetos e suas tarefas associ
 1. Clonar o repositório:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/giovannivicentin/framework-university-project
 cd framework-university-project
 ```
 
